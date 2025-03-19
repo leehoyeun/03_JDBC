@@ -31,6 +31,11 @@ public class User {
 	//->DB 조회 시 날짜 데이터를 원하는 형태의 문자열로
 	// 반환하여 조회할 예정 -> TO_CHAR()이용
 	
+
+	
+	
+
+	
 	//getter / setter
 	//생성자들
 	//toString()..
