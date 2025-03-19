@@ -20,6 +20,7 @@ import lombok.ToString;
 @NoArgsConstructor
 @AllArgsConstructor
 @ToString
+
 public class User {
 	private int userNo;
 	private String userId;

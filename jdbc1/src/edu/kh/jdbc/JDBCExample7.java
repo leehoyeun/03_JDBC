@@ -51,10 +51,11 @@ public class JDBCExample7 {
 			
 			//SQL작성
 			sc = new Scanner(System.in);
-			System.out.print("조회할 성별 (M/F)");
+			System.out.print("조회할 성별 [M / F]");
 			String gender = sc.next().toUpperCase();
-			
-			System.out.println("금여 범위 (최소,최대 순서로 작성):");
+//			char ch =sc.next().charAt(0);
+//			char uppercasech = Character.toUpperCase(ch);
+			System.out.print("급여 범위 (최소,최대 순서로 작성):");
 			int min = sc.nextInt();
 			int max = sc.nextInt();
 			
@@ -64,17 +65,18 @@ public class JDBCExample7 {
 			
 			String sql = """
 					SELECT EMP_ID,EMP_NAME,
-					DECODE (SUBSTR(EMP_NO,8,1),'1','M','2','F') GENDER,
-					SALARY , JOB_NAME , NVL(DEPT_TITLE,'없음')DEPT_TITLE
+					DECODE(SUBSTR(EMP_NO,8,1),'1','M','2','F') GENDER,
+					SALARY , JOB_NAME, NVL(DEPT_TITLE,'없음')DEPT_TITLE
 					FROM EMPLOYEE
-					OIN JOB USING(JOB_CODE)
+					JOIN JOB USING(JOB_CODE)
 					LEFT JOIN DEPARTMENT ON(DEPT_CODE = DEPT_ID)
 					WHERE 
 					DECODE(SUBSTR(EMP_NO,8,1),'1','M','2','F')=?
-					AND SALARY BETWEEN ? AND ?
-					"""+" ORER BY SALARY ?"
+					AND SALARY BETWEEN ? AND?
+					ORDER BY SALARY
+					""";
 			
-			
+			//급여의 오름차순인지 내림차순인지 조건 따라 SQL 보완하기
 			if(sort ==1) sql+= " ASC";
 			else sql += " DESC";
 			
@@ -83,12 +85,15 @@ public class JDBCExample7 {
 			pstmt=conn.prepareStatement(sql);
 			
 			//5.위치홀더 알맞은 값 셋팅
-			
+			pstmt.setString(1, gender);
+			pstmt.setInt(2, min);
+			pstmt.setInt(3, max);
 			//6.SQL수행후 결과값 반환받기
 			rs = pstmt.executeQuery();
 			
 			//7.컬럼을 이용해서 한 행씩 접근하여 컬럼 값 얻어오기
-			System.out.println("-----------------------------------");
+			System.out.println("사번 | 이름   | 성별 | 급여    | 직급명 | 부서명");
+ 			System.out.println("--------------------------------------------------------");
 			
 			boolean flag = true;
 			
@@ -105,7 +110,7 @@ public class JDBCExample7 {
 						empId, empName, gen, salary, jobName, deptTitle);
 			}
 			if (flag) {//flag가 트루라면 while문 실행 안됨
-				System.out.println("죄회결과 없음");
+				System.out.println("조회결과 없음");
 			}
 			
 		} catch (Exception e) {

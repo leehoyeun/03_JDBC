@@ -141,7 +141,7 @@ public class JDBCExample1 {
 						+ "급여 : %d / 입사일 : %s \n", 
 							empId, empName, deptCode, jobCode, salary, hireDate.toString()
 						);
-				
+				   
 			}
 			
 			
